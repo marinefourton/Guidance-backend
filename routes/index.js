@@ -187,8 +187,9 @@ if (req.body.title==''){
     
 // })
 
-router.post('/info-tour',async(req,res,next)=>{
+router.get('/info-tour',async(req,res,next)=>{
     var tour =  await tourModel.find();
+    console.log(tour)
     res.json(tour)
 })
 

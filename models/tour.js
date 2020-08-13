@@ -36,7 +36,8 @@ var tourSchema = mongoose.Schema({
             audio: [{
                 lang: String,
                 urlaudio: String
-            }]
+            }],
+            illustration: String
         }]
     }],
     quizz: [quizzSchema]

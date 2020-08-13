@@ -22,6 +22,85 @@ router.get('/points-counter', async function(req, res, next) {
 });
 
 
+router.get('/save-monument', async function(req,res,next){
+  var newTour = new tourModel({
+    availablelang: ['test','test','test'],
+    title: 'test',
+    calendar: [{
+      Day: 10,
+      open: true,
+      hours: 'test'},
+      {
+        Day: 10,
+        open: true,
+        hours: 'test'},
+        {
+          Day: 10,
+          open: true,
+          hours: 'test'}
+        ],
+    openingSynthesis: 'test',
+    duration: 'test',
+    simpleprice: 10,
+    groupprice: 10,
+    minfordiscount: 10,
+    category: 'test',
+    location: {
+        longitude: 10,
+        latitude: 10
+    },
+    guide:[{
+        type: 'test',
+        urlcouv: 'test',
+        urlPlan: 'test',
+        point: [{
+            coordx: 10,
+            coordy: 10,
+            audio: [{
+                lang: 'test',
+                urlaudio: 'test'
+            }]
+        }]
+    },
+    {
+      type: 'test',
+      urlcouv: 'test',
+      urlPlan: 'test',
+      point: [{
+          coordx: 10,
+          coordy: 10,
+          audio: [{
+              lang: 'test',
+              urlaudio: 'test'
+          }]
+      }]
+  }],
+    quizz: [{
+      question: 'test',
+      reponses: ['test','test','test'],
+      win: 'test'
+    },
+    {
+      question: 'test',
+      reponses: ['test','test','test'],
+      win: 'test'
+    },
+    {
+      question: 'test',
+      reponses: ['test','test','test'],
+      win: 'test'
+    }]
+  })
+  saveTour = await newTour.save()
+})
+
+
+router.get('/search-infos-monument', async function(req, res, next) {
+  var searchMonument = await tourModel.findOne({title:"test"});
+  res.json(searchMonument);
+});
+
+
 router.post('/sign-up', async function(req,res,next){
 
   var error = []
@@ -187,8 +266,9 @@ if (req.body.title==''){
     
 // })
 
-router.post('/info-tour',async(req,res,next)=>{
+router.get('/info-tour',async(req,res,next)=>{
     var tour =  await tourModel.find();
+    console.log(tour)
     res.json(tour)
 })
 

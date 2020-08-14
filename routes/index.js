@@ -26,6 +26,7 @@ router.get('/save-monument', async function(req,res,next){
   var newTour = new tourModel({
     availablelang: ['test','test','test'],
     title: 'test',
+    picture: 'test',
     calendar: [{
       Day: 10,
       open: true,
@@ -95,10 +96,16 @@ router.get('/save-monument', async function(req,res,next){
 })
 
 
-router.get('/search-infos-monument', async function(req, res, next) {
-  var searchMonument = await tourModel.findOne({title:"test"});
-  res.json(searchMonument);
-});
+// router.get('/search-favorites', async function(req, res, next) {
+//   var searchUser = await userModel.findOne({token:req.query.token});
+//   res.json(searchUser.userfavs);
+// });
+
+
+// router.get('/search-infos-monument', async function(req, res, next) {
+//   var searchMonument = await tourModel.findOne({id:req.query.idMonument});
+//   res.json(searchMonument);
+// });
 
 
 router.post('/sign-up', async function(req,res,next){

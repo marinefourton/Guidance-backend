@@ -17,10 +17,10 @@ cloudinary.config({
 
 
 router.get('/points-counter', async function(req, res, next) {
-  var searchUser = await userModel.findOne({token:"JcJVTr56DEE5aha6ESMsknJQer0lYPFm"});
+  // console.log(req.query.token)
+  var searchUser = await userModel.findOne({token:req.query.token});
   res.json(searchUser);
 });
-
 
 router.get('/save-monument', async function(req,res,next){
   var newTour = new tourModel({
@@ -137,7 +137,7 @@ router.post('/sign-up', async function(req,res,next){
     })
   
     saveUser = await newUser.save()
-    console.log(saveUser, "SAVEUSERBDD")
+    // console.log(saveUser, "SAVEUSERBDD")
   
     
     if(saveUser){
@@ -169,15 +169,15 @@ router.post('/sign-in', async function(req,res,next){
       usermail: req.body.usermailFromFront,
       
     })
-    console.log(user, 'USERFIND')
-    console.log(req.body.usermailFromFront, "USERFINDMAIL")
-    console.log(req.body.userpwdFromFront, 'USERFINDPWD')
+    // console.log(user, 'USERFIND')
+    // console.log(req.body.usermailFromFront, "USERFINDMAIL")
+    // console.log(req.body.userpwdFromFront, 'USERFINDPWD')
     
     if(user){
       const passwordEncrypt = SHA256(req.body.userpwdFromFront + user.salt).toString(encBase64)
-      console.log(passwordEncrypt,"PASSWORDENCRYPT")
-      console.log(user.userpwd, 'USER.USERPWD')
-      console.log(req.body.userpwdFromFront, "FRONTUSERPWD")
+      // console.log(passwordEncrypt,"PASSWORDENCRYPT")
+      // console.log(user.userpwd, 'USER.USERPWD')
+      // console.log(req.body.userpwdFromFront, "FRONTUSERPWD")
       if(passwordEncrypt == user.userpwd){
         result = true
         token = user.token
@@ -218,7 +218,7 @@ router.post('/sign-in', async function(req,res,next){
     // console.log("what i get from front", req.body);
     // console.log("les categories selectionnées sont", checkedCat)
     // console.log("aujourd'hui on est le", today)
-    console.log(regex)
+    // console.log(regex)
 
 if (req.body.title==''){
     if(showClosedfromFront) {
@@ -268,7 +268,7 @@ if (req.body.title==''){
 
 router.get('/info-tour',async(req,res,next)=>{
     var tour =  await tourModel.find();
-    console.log(tour)
+    // console.log(tour)
     res.json(tour)
 })
 

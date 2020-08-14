@@ -157,7 +157,7 @@ router.post('/sign-in', async function(req,res,next){
   var user = null
   var error = []
   var token = null
-  
+
   
   if(req.body.usermailFromFront == ''
   || req.body.userpwdFromFront == ''
@@ -273,6 +273,22 @@ router.get('/info-tour',async(req,res,next)=>{
     res.json(tour)
 })
 
+router.get("/send-favorites",async (req,res,next)=>{
+var idMonument = req.query.id
+var mec = await userModel.findOne({token:req.query.token})
+var tabId = await mec.userfavs
+tabId.push(req.query.id)
+await userModel.updateOne(
+  {token:req.query.token},
+  {userfavs:tabId}
+  )
+var  userUpdated = await userModel.findOne({token:req.query.token})
+console.log(userUpdated)
+
+
+res.json({mec:mec,idMonument:idMonument})
+
+})
 
 
 module.exports = router;

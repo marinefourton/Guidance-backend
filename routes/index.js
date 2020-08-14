@@ -286,7 +286,7 @@ var  userUpdated = await userModel.findOne({token:req.query.token})
 console.log(userUpdated)
 
 
-res.json({mec:mec,idMonument:idMonument})
+res.json({idMonument:idMonument})
 
 })
 

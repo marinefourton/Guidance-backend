@@ -277,9 +277,9 @@ router.get('/points-tour', async function(req, res, next) {
   var searchTour = await tourModel.findOne({_id:"5f35568c8602ff5b88c221db"});
   
   
-  console.log(searchTour.guide[0].point[0],'Result')
+  console.log(searchTour.guide[1],'Result')
 
-  res.json(searchTour.guide[0]);
+  res.json(searchTour.guide[1]);
 
 });
 

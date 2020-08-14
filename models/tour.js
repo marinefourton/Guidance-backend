@@ -27,20 +27,7 @@ var tourSchema = mongoose.Schema({
         longitude: Number,
         latitude: Number
     },
-    guide:[{
-        type: String,
-        urlcouv: String,
-        urlPlan: String,
-        point: [{
-            coordx: Number,
-            coordy: Number,
-            audio: [{
-                lang: String,
-                urlaudio: String
-            }],
-            illustration: String
-        }]
-    }],
+    guide:[],
     quizz: [quizzSchema]
    });
 

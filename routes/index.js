@@ -17,15 +17,16 @@ cloudinary.config({
 
 
 router.get('/points-counter', async function(req, res, next) {
-  var searchUser = await userModel.findOne({token:"JcJVTr56DEE5aha6ESMsknJQer0lYPFm"});
+  // console.log(req.query.token)
+  var searchUser = await userModel.findOne({token:req.query.token});
   res.json(searchUser);
 });
-
 
 router.get('/save-monument', async function(req,res,next){
   var newTour = new tourModel({
     availablelang: ['test','test','test'],
     title: 'test',
+    picture: 'test',
     calendar: [{
       Day: 10,
       open: true,
@@ -95,10 +96,16 @@ router.get('/save-monument', async function(req,res,next){
 })
 
 
-router.get('/search-infos-monument', async function(req, res, next) {
-  var searchMonument = await tourModel.findOne({title:"test"});
-  res.json(searchMonument);
-});
+// router.get('/search-favorites', async function(req, res, next) {
+//   var searchUser = await userModel.findOne({token:req.query.token});
+//   res.json(searchUser.userfavs);
+// });
+
+
+// router.get('/search-infos-monument', async function(req, res, next) {
+//   var searchMonument = await tourModel.findOne({id:req.query.idMonument});
+//   res.json(searchMonument);
+// });
 
 
 router.post('/sign-up', async function(req,res,next){
@@ -137,7 +144,7 @@ router.post('/sign-up', async function(req,res,next){
     })
   
     saveUser = await newUser.save()
-    console.log(saveUser, "SAVEUSERBDD")
+    // console.log(saveUser, "SAVEUSERBDD")
   
     
     if(saveUser){
@@ -157,6 +164,7 @@ router.post('/sign-in', async function(req,res,next){
   var user = null
   var error = []
   var token = null
+
   
   if(req.body.usermailFromFront == ''
   || req.body.userpwdFromFront == ''
@@ -169,15 +177,15 @@ router.post('/sign-in', async function(req,res,next){
       usermail: req.body.usermailFromFront,
       
     })
-    console.log(user, 'USERFIND')
-    console.log(req.body.usermailFromFront, "USERFINDMAIL")
-    console.log(req.body.userpwdFromFront, 'USERFINDPWD')
+    // console.log(user, 'USERFIND')
+    // console.log(req.body.usermailFromFront, "USERFINDMAIL")
+    // console.log(req.body.userpwdFromFront, 'USERFINDPWD')
     
     if(user){
       const passwordEncrypt = SHA256(req.body.userpwdFromFront + user.salt).toString(encBase64)
-      console.log(passwordEncrypt,"PASSWORDENCRYPT")
-      console.log(user.userpwd, 'USER.USERPWD')
-      console.log(req.body.userpwdFromFront, "FRONTUSERPWD")
+      // console.log(passwordEncrypt,"PASSWORDENCRYPT")
+      // console.log(user.userpwd, 'USER.USERPWD')
+      // console.log(req.body.userpwdFromFront, "FRONTUSERPWD")
       if(passwordEncrypt == user.userpwd){
         result = true
         token = user.token
@@ -264,7 +272,7 @@ if (req.body.title==''){
 
 router.get('/info-tour',async(req,res,next)=>{
     var tour =  await tourModel.find();
-    console.log(tour)
+    // console.log(tour)
     res.json(tour)
 })
 
@@ -318,6 +326,22 @@ router.post('/get-past-visit', async function(req, res, next) {
 
   res.json(pastBookedTours);
 });
+router.get("/send-favorites",async (req,res,next)=>{
+var idMonument = req.query.id
+var mec = await userModel.findOne({token:req.query.token})
+var tabId = await mec.userfavs
+tabId.push(req.query.id)
+await userModel.updateOne(
+  {token:req.query.token},
+  {userfavs:tabId}
+  )
+var  userUpdated = await userModel.findOne({token:req.query.token})
+console.log(userUpdated)
+
+
+res.json({idMonument:idMonument})
+
+})
 
 
 module.exports = router;

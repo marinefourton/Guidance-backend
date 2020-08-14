@@ -158,6 +158,7 @@ router.post('/sign-in', async function(req,res,next){
   var error = []
   var token = null
   
+  
   if(req.body.usermailFromFront == ''
   || req.body.userpwdFromFront == ''
   ){

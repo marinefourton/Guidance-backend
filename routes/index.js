@@ -102,6 +102,12 @@ router.get('/save-monument', async function(req,res,next){
 // });
 
 
+// router.get('/search-infos-monument', async function(req, res, next) {
+//   var searchMonument = await tourModel.findOne({id:req.query.idMonument});
+//   res.json(searchMonument);
+// });
+
+
 router.post('/sign-up', async function(req,res,next){
 
   var error = []
@@ -287,7 +293,7 @@ var  userUpdated = await userModel.findOne({token:req.query.token})
 console.log(userUpdated)
 
 
-res.json({mec:mec,idMonument:idMonument})
+res.json({idMonument:idMonument})
 
 })
 

@@ -96,10 +96,19 @@ router.get('/save-monument', async function(req,res,next){
 })
 
 
-// router.get('/search-favorites', async function(req, res, next) {
-//   var searchUser = await userModel.findOne({token:req.query.token});
-//   res.json(searchUser.userfavs);
-// });
+router.get('/search-favorites', async function(req, res, next) {
+  var searchUser = await userModel.findOne({token:req.query.token});
+  var idFavs = searchUser.userfavs;
+  var myFavs = [];
+  for (var i=0; i<idFavs.length; i++){
+    // console.log("id cherché", idFavs[i])
+    var searchMonument = await tourModel.findOne({_id:idFavs[i]});
+    // console.log("lieu trouvé", searchMonument)
+    await myFavs.push(searchMonument);
+  }
+  // console.log("mes favoris", myFavs)
+  res.json(myFavs);
+});
 
 
 // router.get('/search-infos-monument', async function(req, res, next) {

@@ -299,7 +299,7 @@ await userModel.updateOne(
   {userfavs:tabId}
   )
 var  userUpdated = await userModel.findOne({token:req.query.token})
-console.log(userUpdated)
+// console.log(userUpdated)
 
 
 res.json({idMonument:idMonument})

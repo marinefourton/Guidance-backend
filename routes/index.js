@@ -232,10 +232,6 @@ router.post('/sign-in', async function(req,res,next){
     let tours
     var stringToGoIntoTheRegex = req.body.title;
     var regex = new RegExp(stringToGoIntoTheRegex);
-    // console.log("what i get from front", req.body);
-    // console.log("les categories selectionnées sont", checkedCat)
-    // console.log("aujourd'hui on est le", today)
-    // console.log(regex)
 
 if (req.body.title==''){
     if(showClosedfromFront) {
@@ -289,6 +285,56 @@ router.get('/info-tour',async(req,res,next)=>{
     res.json(tour)
 })
 
+router.put(`/update-point/:token/:score`, async function(req, res, next) {
+
+  const user = await userModel.updateOne(
+    {token: req.params.token},
+    {$inc: {points: Number(req.params.score)}}
+  )
+  const updatedUser = await userModel.findOne(
+    {token: req.params.token}
+  )
+  
+  res.json({userpoints: updatedUser.points});
+
+});
+
+router.put(`/update-visit-history/:token/:tourID`, async function(req, res, next) {
+  const user = await userModel.findOne({token: req.params.token})
+                              .populate("bookedtours.bookedplace")
+                              .exec()
+
+  user.bookedtours.push(
+    {bookedplace: req.params.tourID,
+     bookedhour: Date.now(),
+    }
+  )
+});
+
+router.post('/get-quizz', async function(req, res, next) {
+
+  const tour = await tourModel.findById(req.body.tourID)
+  res.json({quizz: tour.quizz});
+});
+
+router.post('/get-past-visit', async function(req, res, next) {
+
+  const user = await userModel.findOne({token: req.body.token})
+                              .populate("bookedtours.bookedplace")
+                              .exec()
+
+  let bookedToursOfUser = user.bookedtours
+  var now = Date.now();
+  let pastBookedTours = []
+
+  bookedToursOfUser.forEach(tour => {
+    if (tour.bookedhour < now){
+      pastBookedTours.push(tour)
+    }
+  })
+
+  res.json(pastBookedTours);
+});
 router.get("/send-favorites",async (req,res,next)=>{
 var idMonument = req.query.id
 var mec = await userModel.findOne({token:req.query.token})

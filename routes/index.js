@@ -111,10 +111,10 @@ router.get('/search-favorites', async function(req, res, next) {
 });
 
 
-// router.get('/search-infos-monument', async function(req, res, next) {
-//   var searchMonument = await tourModel.findOne({id:req.query.idMonument});
-//   res.json(searchMonument);
-// });
+router.get('/search-infos-monument', async function(req, res, next) {
+  var searchMonument = await tourModel.findOne({_id:req.query.idMonument});
+  res.json(searchMonument);
+});
 
 
 router.post('/sign-up', async function(req,res,next){

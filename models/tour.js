@@ -27,10 +27,6 @@ var tourSchema = mongoose.Schema({
         longitude: Number,
         latitude: Number
     },
-<<<<<<< HEAD
-    guide:[],
-    quizz: [quizzSchema]//sous-doc
-=======
     guide:[
         // type: String,
         // urlcouv: String,
@@ -50,7 +46,6 @@ var tourSchema = mongoose.Schema({
        
     ], 
     quizz: [quizzSchema]
->>>>>>> 8be43915f884f61a8d4027846bbe8c11d404bbc2
    });
 
 var tourModel = mongoose.model('tours', tourSchema);

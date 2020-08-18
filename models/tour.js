@@ -15,6 +15,7 @@ var calendarSchema = mongoose.Schema({
 var tourSchema = mongoose.Schema({
     availablelang: [String],
     title: String,
+    picture: String,
     calendar : [calendarSchema],
     openingSynthesis: String,
     duration: String,

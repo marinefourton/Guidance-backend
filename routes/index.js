@@ -339,14 +339,15 @@ router.get("/send-favorites",async (req,res,next)=>{
 var idMonument = req.query.id
 var mec = await userModel.findOne({token:req.query.token})
 var tabId = await mec.userfavs
-tabId.push(req.query.id)
+
+
+
 await userModel.updateOne(
   {token:req.query.token},
   {userfavs:tabId}
   )
 var  userUpdated = await userModel.findOne({token:req.query.token})
-// console.log(userUpdated)
-
+  console.log(userUpdated)
 
 res.json({idMonument:idMonument})
 

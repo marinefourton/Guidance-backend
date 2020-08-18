@@ -16,7 +16,7 @@ var tourSchema = mongoose.Schema({
     availablelang: [String],
     title: String,
     picture: String,
-    calendar : [calendarSchema],
+    calendar : [calendarSchema],//sous-doc
     openingSynthesis: String,
     duration: String,
     simpleprice: Number,
@@ -28,7 +28,7 @@ var tourSchema = mongoose.Schema({
         latitude: Number
     },
     guide:[],
-    quizz: [quizzSchema]
+    quizz: [quizzSchema]//sous-doc
    });
 
 var tourModel = mongoose.model('tours', tourSchema);

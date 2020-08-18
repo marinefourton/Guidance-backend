@@ -45,6 +45,99 @@ router.get("/save-monument", async function (req, res, next) {
       longitude: 48.866642,
       latitude: 2.355440,
     },
+    guide:[{
+        type: 'exterieur',
+        urlcouv: 'test',
+        urlPlan: 'https://res.cloudinary.com/dvx36h3ub/image/upload/v1597326064/SaintEustacheExterieur_bogze9.jpg',
+        point: [{
+            coordx: 10,
+            coordy: 10,
+            audio: [{
+                lang: 'fr',
+                urlaudio: 'test'
+            }]
+        }]
+    },
+    {
+      type: 'interieur',
+      urlcouv: 'test',
+      urlPlan: 'https://res.cloudinary.com/dvx36h3ub/image/upload/v1597066939/eglise-saint-eustache-plan_qaaqxd.png',
+      point: [{
+          coordx: 130,
+          coordy: 160,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/Vouet-Martyre_Saint_Eustache_mxhv0i.jpg",
+          title: 'Martyr de Saint-Eustache',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+          }]
+      },{
+
+          coordx: 220,
+          coordy: 200,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/banc_d_oeuvre_nj3gw8.jpg",
+          title: "Banc d'oeuvre",
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+      }]}, {
+
+          coordx: 390,
+          coordy: 140,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/retable_KH_tz4g8t.jpg",
+          title: 'Keth Haring',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+    }]}, {
+
+          coordx: 480,
+          coordy: 220,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655227/Chapelle_Marie_oe8nmi.jpg",
+          title: 'Chapelle de la Vierge',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+  }]}, {
+
+          coordx: 420,
+          coordy: 290,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/charcutiers-armleder_reu3bm.jpg",
+          title: 'Chapelle des Charcutiers',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+}]}, {
+
+          coordx: 130,
+          coordy: 280,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/st_agnes_gxsew3.jpg",
+          title: 'Martyr Saint-Agnès',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+        }]}, {
+
+          coordx: 120,
+          coordy: 280,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/orgues_cvoghl.jpg",
+          title: 'Les Grandes Orgues',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+        }]}, 
+    ]
+  }],
+    quizz: [{
+      question: 'test',
+      reponses: ['test','test','test'],
+      win: 'test'
+    },
+    {
+      question: 'test',
+      reponses: ['test','test','test'],
+      win: 'test'
+    }],
     guide: [
       {
         type: "exterieur",
@@ -330,7 +423,25 @@ router.get('/info-tour',async(req,res,next)=>{
     var tour =  await tourModel.find();
     // console.log(tour)
     res.json(tour)
+    console.log(tour)
 })
+
+router.get('/points-tour', async function(req, res, next) {
+  var searchTour = await tourModel.findOne({_id:"5f3a62416cb25f06c0e53b1e"});
+  
+  // for(var i=0; searchTour.guide.length > 1; i++) {
+  //   if (searchTour.guide[i].type == "exterieur") {
+  //   res.json(searchTour.guide[i].type)
+  // } else if(searchTour.guide[i].type == "interieur") {
+  //   res.json(searchTour.guide[i].type)
+  // }
+  // console.log(searchTour.guide[i], 'bordel')
+  // }
+  console.log(searchTour,'Result')
+
+  res.json(searchTour);
+
+});
 
 
 router.get("/info-tour", async (req, res, next) => {
@@ -414,6 +525,21 @@ router.post('/get-futur-visit', async function(req, res, next) {
 
   res.json(futurBookedTours);
 });
+<<<<<<< HEAD
+router.get("/send-favorites",async (req,res,next)=>{
+var idMonument = req.query.id;
+var mec = await userModel.findOne({token:req.query.token});
+var tabId = await mec.userfavs;
+tabId.push(req.query.id)
+
+
+await userModel.updateOne(
+  {token:req.query.token},
+  {userfavs:tabId}
+  )
+var  userUpdated = await userModel.findOne({token:req.query.token})
+=======
+>>>>>>> 8be43915f884f61a8d4027846bbe8c11d404bbc2
 
 router.get("/send-favorites", async (req, res, next) => {
   var idMonument = req.query.id;

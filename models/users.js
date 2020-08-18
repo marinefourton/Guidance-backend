@@ -5,7 +5,7 @@ var bookedSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref:'tours'
                 },
-    bookedhour: String,
+    bookedhour: Number,
     bookedperson: Number,
 })
 

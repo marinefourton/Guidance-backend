@@ -45,6 +45,99 @@ router.get("/save-monument", async function (req, res, next) {
       longitude: 48.866642,
       latitude: 2.355440,
     },
+    guide:[{
+        type: 'exterieur',
+        urlcouv: 'test',
+        urlPlan: 'https://res.cloudinary.com/dvx36h3ub/image/upload/v1597326064/SaintEustacheExterieur_bogze9.jpg',
+        point: [{
+            coordx: 10,
+            coordy: 10,
+            audio: [{
+                lang: 'fr',
+                urlaudio: 'test'
+            }]
+        }]
+    },
+    {
+      type: 'interieur',
+      urlcouv: 'test',
+      urlPlan: 'https://res.cloudinary.com/dvx36h3ub/image/upload/v1597066939/eglise-saint-eustache-plan_qaaqxd.png',
+      point: [{
+          coordx: 130,
+          coordy: 160,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/Vouet-Martyre_Saint_Eustache_mxhv0i.jpg",
+          title: 'Martyr de Saint-Eustache',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+          }]
+      },{
+
+          coordx: 220,
+          coordy: 200,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/banc_d_oeuvre_nj3gw8.jpg",
+          title: "Banc d'oeuvre",
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+      }]}, {
+
+          coordx: 390,
+          coordy: 140,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/retable_KH_tz4g8t.jpg",
+          title: 'Keth Haring',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+    }]}, {
+
+          coordx: 480,
+          coordy: 220,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655227/Chapelle_Marie_oe8nmi.jpg",
+          title: 'Chapelle de la Vierge',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+  }]}, {
+
+          coordx: 420,
+          coordy: 290,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/charcutiers-armleder_reu3bm.jpg",
+          title: 'Chapelle des Charcutiers',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+}]}, {
+
+          coordx: 130,
+          coordy: 280,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/st_agnes_gxsew3.jpg",
+          title: 'Martyr Saint-Agnès',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+        }]}, {
+
+          coordx: 120,
+          coordy: 280,
+          illustration: "https://res.cloudinary.com/dvx36h3ub/image/upload/v1597655228/orgues_cvoghl.jpg",
+          title: 'Les Grandes Orgues',
+          audio: [{
+              lang: 'fr',
+              urlaudio: 'https://res.cloudinary.com/dvx36h3ub/video/upload/v1597652463/Audio_Martyr_St_Eustache_hsax1h.mp3'
+        }]}, 
+    ]
+  }],
+    quizz: [{
+      question: 'test',
+      reponses: ['test','test','test'],
+      win: 'test'
+    },
+    {
+      question: 'test',
+      reponses: ['test','test','test'],
+      win: 'test'
+    }],
     guide: [
       {
         type: "exterieur",
@@ -325,17 +418,30 @@ router.post("/display-filtered-tours", async function (req, res, next) {
   res.json({ result: tours });
 });
 
-//   router.post('/display-input-tours', async function(req, res, next) {
+router.get('/info-tour',async(req,res,next)=>{
+    var tour =  await tourModel.find();
+    // console.log(tour)
+    res.json(tour)
+    console.log(tour)
+})
 
-//       let lieu = req.body.title.toLowerCase()
+router.get('/points-tour', async function(req, res, next) {
+  var searchTour = await tourModel.findOne({_id:"5f3a62416cb25f06c0e53b1e"});
+  
+  // for(var i=0; searchTour.guide.length > 1; i++) {
+  //   if (searchTour.guide[i].type == "exterieur") {
+  //   res.json(searchTour.guide[i].type)
+  // } else if(searchTour.guide[i].type == "interieur") {
+  //   res.json(searchTour.guide[i].type)
+  // }
+  // console.log(searchTour.guide[i], 'bordel')
+  // }
+  console.log(searchTour,'Result')
 
-//       tours = await tourModel.find({
-//         title: lieu
-//         })
+  res.json(searchTour);
 
-//     res.json({result: tours})
+});
 
-// })
 
 router.get("/info-tour", async (req, res, next) => {
   var tour = await tourModel.find();
@@ -343,6 +449,31 @@ router.get("/info-tour", async (req, res, next) => {
   res.json(tour);
 });
 
+router.put(`/update-visit-history/:token/:tourID`, async function(req, res, next) {
+  const user = await userModel.findOne({token: req.params.token})
+                              .populate("bookedtours.bookedplace")
+                              .exec()
+let dejaExistant=false;
+
+user.bookedtours.forEach(tour => {
+  if (tour.bookedplace.equals(req.params.tourID)) {
+    dejaExistant=true;
+  }
+})
+
+if (dejaExistant==false){
+  user.bookedtours.push(
+    {bookedplace: req.params.tourID,
+     bookedhour: Date.now(),
+    }
+  )
+  user.save();
+  }
+
+});
+
+
+  console.log(user)
 router.put(`/update-point/:token/:score`, async function (req, res, next) {
   const user = await userModel.updateOne({ token: req.params.token }, { $inc: { points: Number(req.params.score) } });
   const updatedUser = await userModel.findOne({ token: req.params.token });
@@ -368,14 +499,34 @@ router.post("/get-past-visit", async function (req, res, next) {
   var now = Date.now();
   let pastBookedTours = [];
 
-  bookedToursOfUser.forEach((tour) => {
-    if (tour.bookedhour < now) {
-      pastBookedTours.push(tour);
+  bookedToursOfUser.forEach(tour => {
+    if (Number(tour.bookedhour) < Number(now)){
+      pastBookedTours.push(tour)
     }
   });
 
   res.json(pastBookedTours);
 });
+
+router.post('/get-futur-visit', async function(req, res, next) {
+
+  const user = await userModel.findOne({token: req.body.token})
+                              .populate("bookedtours.bookedplace")
+                              .exec()
+
+  let bookedToursOfUser = user.bookedtours
+  var now = Date.now();
+  let futurBookedTours = []
+
+  bookedToursOfUser.forEach(tour => {
+    if (Number(tour.bookedhour) > Number(now)){
+      futurBookedTours.push(tour)
+    }
+  })
+
+  res.json(futurBookedTours);
+});
+
 router.get("/send-favorites", async (req, res, next) => {
   var idMonument = req.query.id;
   var mec = await userModel.findOne({ token: req.query.token });

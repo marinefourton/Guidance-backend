@@ -336,10 +336,10 @@ router.post('/get-past-visit', async function(req, res, next) {
   res.json(pastBookedTours);
 });
 router.get("/send-favorites",async (req,res,next)=>{
-var idMonument = req.query.id
-var mec = await userModel.findOne({token:req.query.token})
-var tabId = await mec.userfavs
-
+var idMonument = req.query.id;
+var mec = await userModel.findOne({token:req.query.token});
+var tabId = await mec.userfavs;
+tabId.push(req.query.id)
 
 
 await userModel.updateOne(
@@ -347,7 +347,6 @@ await userModel.updateOne(
   {userfavs:tabId}
   )
 var  userUpdated = await userModel.findOne({token:req.query.token})
-  console.log(userUpdated)
 
 res.json({idMonument:idMonument})
 

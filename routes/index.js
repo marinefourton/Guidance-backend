@@ -258,18 +258,6 @@ if (req.body.title==''){
     res.json({result: tours}) 
   })
 
-//   router.post('/display-input-tours', async function(req, res, next) {
-
-//       let lieu = req.body.title.toLowerCase()
-
-//       tours = await tourModel.find({ 
-//         title: lieu
-//         })
-
-//     res.json({result: tours}) 
-    
-// })
-
 router.get('/info-tour',async(req,res,next)=>{
     var tour =  await tourModel.find();
     // console.log(tour)
@@ -294,12 +282,26 @@ router.put(`/update-visit-history/:token/:tourID`, async function(req, res, next
   const user = await userModel.findOne({token: req.params.token})
                               .populate("bookedtours.bookedplace")
                               .exec()
+let dejaExistant=false;
 
+user.bookedtours.forEach(tour => {
+  if (tour.bookedplace.equals(req.params.tourID)) {
+    dejaExistant=true;
+  }
+})
+
+console.log(dejaExistant)
+
+if (dejaExistant==false){
   user.bookedtours.push(
     {bookedplace: req.params.tourID,
      bookedhour: Date.now(),
     }
   )
+  user.save();
+  }
+
+  console.log(user)
 });
 
 router.post('/get-quizz', async function(req, res, next) {
@@ -319,13 +321,33 @@ router.post('/get-past-visit', async function(req, res, next) {
   let pastBookedTours = []
 
   bookedToursOfUser.forEach(tour => {
-    if (tour.bookedhour < now){
+    if (Number(tour.bookedhour) < Number(now)){
       pastBookedTours.push(tour)
     }
   })
 
   res.json(pastBookedTours);
 });
+
+router.post('/get-futur-visit', async function(req, res, next) {
+
+  const user = await userModel.findOne({token: req.body.token})
+                              .populate("bookedtours.bookedplace")
+                              .exec()
+
+  let bookedToursOfUser = user.bookedtours
+  var now = Date.now();
+  let futurBookedTours = []
+
+  bookedToursOfUser.forEach(tour => {
+    if (Number(tour.bookedhour) > Number(now)){
+      futurBookedTours.push(tour)
+    }
+  })
+
+  res.json(futurBookedTours);
+});
+
 router.get("/send-favorites",async (req,res,next)=>{
 var idMonument = req.query.id
 var mec = await userModel.findOne({token:req.query.token})

@@ -305,13 +305,14 @@ router.post("/display-filtered-tours", async function (req, res, next) {
 
   var d = new Date();
   var today = d.getDay();
+  console.log(today)
   let tours;
   var stringToGoIntoTheRegex = req.body.title;
   var regex = new RegExp(stringToGoIntoTheRegex);
 
   if (req.body.title == "") {
     if (showClosedfromFront) {
-      tours = await tourModel.find({ category: { $in: checkedCat }, simpleprice: { $lt: pricefromFront }, calendar: { day: today, open: true } });
+      tours = await tourModel.find({ category: { $in: checkedCat }, simpleprice: { $lt: pricefromFront }, calendar: { $elemMatch: { Day: today, open: true }}});
     } else {
       tours = await tourModel.find({ category: { $in: checkedCat }, simpleprice: { $lt: pricefromFront } });
     }
@@ -361,8 +362,6 @@ if (dejaExistant==false){
 
 });
 
-
-  console.log(user)
 router.put(`/update-point/:token/:score`, async function (req, res, next) {
   const user = await userModel.updateOne({ token: req.params.token }, { $inc: { points: Number(req.params.score) } });
   const updatedUser = await userModel.findOne({ token: req.params.token });

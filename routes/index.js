@@ -473,7 +473,7 @@ if (dejaExistant==false){
 });
 
 
-  console.log(user)
+  
 router.put(`/update-point/:token/:score`, async function (req, res, next) {
   const user = await userModel.updateOne({ token: req.params.token }, { $inc: { points: Number(req.params.score) } });
   const updatedUser = await userModel.findOne({ token: req.params.token });

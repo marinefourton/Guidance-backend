@@ -541,17 +541,40 @@ router.post('/get-futur-visit', async function(req, res, next) {
 
   res.json(futurBookedTours);
 });
-router.get("/send-favorites",async (req,res,next)=>{
-var idMonument = req.query.id;
-var mec = await userModel.findOne({token:req.query.token});
-var tabId = await mec.userfavs;
-tabId.push(req.query.id)
 
-await userModel.updateOne(
-  {token:req.query.token},
-  {userfavs:tabId}
-  )
-var  userUpdated = await userModel.findOne({token:req.query.token})
+
+
+router.get("/send-favorites", async (req, res, next) => {
+  var idMonument = req.query.id;
+
+  var mec = await userModel.findOne({ token: req.query.token });
+  var tabId = await mec.userfavs;
+  console.log(tabId,idMonument)
+ if(tabId.indexOf(idMonument) == -1){
+   tabId.push(idMonument)
+   console.log("if")
+ } else {
+  tabId.splice(tabId.indexOf(idMonument),1)
+ }
+
+
+
+/* tabId.map((el,i)=>{
+if(el.toString() != idMonument){
+
+      console.log("ajout")
+
+      }else{
+         console.log("efface")
+      }
+    
+  }
+) */
+    
+  await userModel.updateOne({ token: req.query.token }, { userfavs: tabId });
+  var userUpdated = await userModel.findOne({ token: req.query.token });
+  console.log(userUpdated)
+
   res.json({ idMonument: idMonument });
 });
 

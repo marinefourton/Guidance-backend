@@ -473,7 +473,6 @@ if (dejaExistant==false){
 });
 
 
-  console.log(user)
 router.put(`/update-point/:token/:score`, async function (req, res, next) {
   const user = await userModel.updateOne({ token: req.params.token }, { $inc: { points: Number(req.params.score) } });
   const updatedUser = await userModel.findOne({ token: req.params.token });
@@ -526,30 +525,39 @@ router.post('/get-futur-visit', async function(req, res, next) {
 
   res.json(futurBookedTours);
 });
-<<<<<<< HEAD
-router.get("/send-favorites",async (req,res,next)=>{
-var idMonument = req.query.id;
-var mec = await userModel.findOne({token:req.query.token});
-var tabId = await mec.userfavs;
-tabId.push(req.query.id)
 
 
-await userModel.updateOne(
-  {token:req.query.token},
-  {userfavs:tabId}
-  )
-var  userUpdated = await userModel.findOne({token:req.query.token})
-=======
->>>>>>> 8be43915f884f61a8d4027846bbe8c11d404bbc2
 
 router.get("/send-favorites", async (req, res, next) => {
   var idMonument = req.query.id;
+
   var mec = await userModel.findOne({ token: req.query.token });
   var tabId = await mec.userfavs;
-  tabId.push(req.query.id);
+  console.log(tabId,idMonument)
+ if(tabId.indexOf(idMonument) == -1){
+   tabId.push(idMonument)
+   console.log("if")
+ } else {
+  tabId.splice(tabId.indexOf(idMonument),1)
+ }
+
+
+
+/* tabId.map((el,i)=>{
+if(el.toString() != idMonument){
+
+      console.log("ajout")
+
+      }else{
+         console.log("efface")
+      }
+    
+  }
+) */
+    
   await userModel.updateOne({ token: req.query.token }, { userfavs: tabId });
   var userUpdated = await userModel.findOne({ token: req.query.token });
-  // console.log(userUpdated)
+  console.log(userUpdated)
 
   res.json({ idMonument: idMonument });
 });

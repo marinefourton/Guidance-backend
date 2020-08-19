@@ -448,28 +448,28 @@ router.get("/info-tour", async (req, res, next) => {
   res.json(tour);
 });
 
-router.put(`/update-visit-history/:token/:tourID`, async function(req, res, next) {
-  const user = await userModel.findOne({token: req.params.token})
-                              .populate("bookedtours.bookedplace")
-                              .exec()
-let dejaExistant=false;
+// router.put(`/update-visit-history/:token/:tourID`, async function(req, res, next) {
+//   const user = await userModel.findOne({token: req.params.token})
+//                               .populate("bookedtours.bookedplace")
+//                               .exec()
+// let dejaExistant=false;
 
-user.bookedtours.forEach(tour => {
-  if (tour.bookedplace.equals(req.params.tourID)) {
-    dejaExistant=true;
-  }
-})
+// user.bookedtours.forEach(tour => {
+//   if (tour.bookedplace.equals(req.params.tourID)) {
+//     dejaExistant=true;
+//   }
+// })
 
-if (dejaExistant==false){
-  user.bookedtours.push(
-    {bookedplace: req.params.tourID,
-     bookedhour: Date.now(),
-    }
-  )
-  user.save();
-  }
+// if (dejaExistant==false){
+//   user.bookedtours.push(
+//     {bookedplace: req.params.tourID,
+//      bookedhour: Date.now(),
+//     }
+//   )
+//   user.save();
+//   }
 
-});
+// });
 
 router.put(`/update-point/:token/:score`, async function (req, res, next) {
   const user = await userModel.updateOne({ token: req.params.token }, { $inc: { points: Number(req.params.score) } });
@@ -480,12 +480,30 @@ router.put(`/update-point/:token/:score`, async function (req, res, next) {
 
 router.put(`/update-visit-history`, async function (req, res, next) {
   const user = await userModel.findOne({ token: req.body.token }).populate("bookedtours.bookedplace").exec();
-  user.bookedtours.push({ bookedplace: req.body.tourID, bookedhour: Date.now() });
+  let dejaExistant=false;
+
+  user.bookedtours.forEach(tour => {
+    if (tour.bookedplace.equals(req.body.tourID)) {
+      dejaExistant=true;
+    }
+  })
+
+  if (dejaExistant==false){
+    user.bookedtours.push(
+      {bookedplace: req.body.tourID,
+      bookedhour: Date.now(),
+      })
+    user.save();
+    }
+
+    console.log(dejaExistant)
+
   res.json()
 });
 
 router.post("/get-quizz", async function (req, res, next) {
   const tour = await tourModel.findById(req.body.tourID);
+
   res.json(tour.quizz);
 });
 

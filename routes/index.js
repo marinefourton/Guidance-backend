@@ -398,7 +398,7 @@ router.post("/display-filtered-tours", async function (req, res, next) {
 
   var d = new Date();
   var today = d.getDay();
-  console.log(today)
+
   let tours;
   var stringToGoIntoTheRegex = req.body.title;
   var regex = new RegExp(stringToGoIntoTheRegex);
@@ -423,7 +423,6 @@ router.get('/info-tour',async(req,res,next)=>{
     var tour =  await tourModel.find();
     // console.log(tour)
     res.json(tour)
-    console.log(tour)
 })
 
 router.get('/points-tour', async function(req, res, next) {
@@ -437,7 +436,6 @@ router.get('/points-tour', async function(req, res, next) {
   // }
   // console.log(searchTour.guide[i], 'bordel')
   // }
-  console.log(searchTour,'Result')
 
   res.json(searchTour);
 
@@ -480,15 +478,15 @@ router.put(`/update-point/:token/:score`, async function (req, res, next) {
   res.json({ userpoints: updatedUser.points });
 });
 
-router.put(`/update-visit-history/:token/:tourID`, async function (req, res, next) {
-  const user = await userModel.findOne({ token: req.params.token }).populate("bookedtours.bookedplace").exec();
-
-  user.bookedtours.push({ bookedplace: req.params.tourID, bookedhour: Date.now() });
+router.put(`/update-visit-history`, async function (req, res, next) {
+  const user = await userModel.findOne({ token: req.body.token }).populate("bookedtours.bookedplace").exec();
+  user.bookedtours.push({ bookedplace: req.body.tourID, bookedhour: Date.now() });
+  res.json()
 });
 
 router.post("/get-quizz", async function (req, res, next) {
   const tour = await tourModel.findById(req.body.tourID);
-  res.json({ quizz: tour.quizz });
+  res.json(tour.quizz);
 });
 
 router.post("/get-past-visit", async function (req, res, next) {

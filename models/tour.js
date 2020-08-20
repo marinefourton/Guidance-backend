@@ -16,7 +16,7 @@ var tourSchema = mongoose.Schema({
     availablelang: [String],
     title: String,
     picture: String,
-    calendar : [calendarSchema],
+    calendar : [calendarSchema],//sous-doc
     openingSynthesis: String,
     duration: String,
     simpleprice: Number,

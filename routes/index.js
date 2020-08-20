@@ -549,7 +549,6 @@ router.get("/send-favorites", async (req, res, next) => {
 
   var mec = await userModel.findOne({ token: req.query.token });
   var tabId = await mec.userfavs;
-  console.log(tabId,idMonument)
  if(tabId.indexOf(idMonument) == -1){
    tabId.push(idMonument)
    console.log("if")
@@ -575,7 +574,7 @@ if(el.toString() != idMonument){
   var userUpdated = await userModel.findOne({ token: req.query.token });
   console.log(userUpdated)
 
-  res.json({ idMonument: idMonument });
+  res.json({ idMonument: idMonument, listFavId: tabId });
 });
 
 module.exports = router;

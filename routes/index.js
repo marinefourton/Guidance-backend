@@ -301,6 +301,7 @@ router.get("/search-favorites", async function (req, res, next) {
 
 router.get("/search-infos-monument", async function (req, res, next) {
   var searchMonument = await tourModel.findOne({ _id: req.query.idMonument });
+  // console.log(searchMonument, 'WIIIIIIIIIIIIIIIIIII')
   res.json(searchMonument);
 });
 
@@ -425,20 +426,14 @@ router.get('/info-tour',async(req,res,next)=>{
 })
 
 router.get('/points-tour', async function(req, res, next) {
-  var searchTour = await tourModel.findOne({_id:"5f3a62416cb25f06c0e53b1e"});
+  var searchTour = await tourModel.findOne( { _id : req.query.keyId } );
+  var Guide = searchTour.guide;
   
-  // for(var i=0; searchTour.guide.length > 1; i++) {
-  //   if (searchTour.guide[i].type == "exterieur") {
-  //   res.json(searchTour.guide[i].type)
-  // } else if(searchTour.guide[i].type == "interieur") {
-  //   res.json(searchTour.guide[i].type)
-  // }
-  // console.log(searchTour.guide[i], 'bordel')
-  // }
-
-  res.json(searchTour);
-
+  var placeName = searchTour.title
+  
+    res.json({Guide, placeName})
 });
+
 
 
 router.get("/info-tour", async (req, res, next) => {

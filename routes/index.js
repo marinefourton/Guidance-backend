@@ -16,7 +16,6 @@ cloudinary.config({
 });
 
 router.get("/points-counter", async function (req, res, next) {
-  // console.log(req.query.token)
   var searchUser = await userModel.findOne({ token: req.query.token });
   res.json(searchUser);
 });
@@ -549,27 +548,11 @@ router.get("/send-favorites", async (req, res, next) => {
 
   var mec = await userModel.findOne({ token: req.query.token });
   var tabId = await mec.userfavs;
-  console.log(tabId,idMonument)
  if(tabId.indexOf(idMonument) == -1){
    tabId.push(idMonument)
-   console.log("if")
  } else {
   tabId.splice(tabId.indexOf(idMonument),1)
  }
-
-
-
-/* tabId.map((el,i)=>{
-if(el.toString() != idMonument){
-
-      console.log("ajout")
-
-      }else{
-         console.log("efface")
-      }
-    
-  }
-) */
     
   await userModel.updateOne({ token: req.query.token }, { userfavs: tabId });
   var userUpdated = await userModel.findOne({ token: req.query.token });

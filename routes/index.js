@@ -558,7 +558,7 @@ router.get("/send-favorites", async (req, res, next) => {
   var userUpdated = await userModel.findOne({ token: req.query.token });
   console.log(userUpdated)
 
-  res.json({ idMonument: idMonument });
+  res.json({ idMonument: idMonument, listFavId: tabId });
 });
 
 module.exports = router;

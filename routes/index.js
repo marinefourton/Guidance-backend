@@ -2,7 +2,6 @@ var express = require("express");
 var router = express.Router();
 var SHA256 = require("crypto-js/sha256");
 var encBase64 = require("crypto-js/enc-base64");
-var mongoose = require("mongoose");
 var uid2 = require("uid2");
 
 var userModel = require("../models/users");
@@ -290,18 +289,14 @@ router.get("/search-favorites", async function (req, res, next) {
   var idFavs = searchUser.userfavs;
   var myFavs = [];
   for (var i = 0; i < idFavs.length; i++) {
-    // console.log("id cherché", idFavs[i])
     var searchMonument = await tourModel.findOne({ _id: idFavs[i] });
-    // console.log("lieu trouvé", searchMonument)
     await myFavs.push(searchMonument);
   }
-  // console.log("mes favoris", myFavs)
   res.json(myFavs);
 });
 
 router.get("/search-infos-monument", async function (req, res, next) {
   var searchMonument = await tourModel.findOne({ _id: req.query.idMonument });
-  // console.log(searchMonument, 'WIIIIIIIIIIIIIIIIIII')
   res.json(searchMonument);
 });
 
@@ -335,7 +330,6 @@ router.post("/sign-up", async function (req, res, next) {
     });
 
     saveUser = await newUser.save();
-    // console.log(saveUser, "SAVEUSERBDD")
 
     if (saveUser) {
       result = true;
@@ -360,15 +354,9 @@ router.post("/sign-in", async function (req, res, next) {
     const user = await userModel.findOne({
       usermail: req.body.usermailFromFront,
     });
-    // console.log(user, 'USERFIND')
-    // console.log(req.body.usermailFromFront, "USERFINDMAIL")
-    // console.log(req.body.userpwdFromFront, 'USERFINDPWD')
 
     if (user) {
       const passwordEncrypt = SHA256(req.body.userpwdFromFront + user.salt).toString(encBase64);
-      // console.log(passwordEncrypt,"PASSWORDENCRYPT")
-      // console.log(user.userpwd, 'USER.USERPWD')
-      // console.log(req.body.userpwdFromFront, "FRONTUSERPWD")
       if (passwordEncrypt == user.userpwd) {
         result = true;
         token = user.token;
@@ -421,7 +409,6 @@ router.post("/display-filtered-tours", async function (req, res, next) {
 
 router.get('/info-tour',async(req,res,next)=>{
     var tour =  await tourModel.find();
-    // console.log(tour)
     res.json(tour)
 })
 
@@ -438,32 +425,9 @@ router.get('/points-tour', async function(req, res, next) {
 
 router.get("/info-tour", async (req, res, next) => {
   var tour = await tourModel.find();
-  // console.log(tour)
   res.json(tour);
 });
 
-// router.put(`/update-visit-history/:token/:tourID`, async function(req, res, next) {
-//   const user = await userModel.findOne({token: req.params.token})
-//                               .populate("bookedtours.bookedplace")
-//                               .exec()
-// let dejaExistant=false;
-
-// user.bookedtours.forEach(tour => {
-//   if (tour.bookedplace.equals(req.params.tourID)) {
-//     dejaExistant=true;
-//   }
-// })
-
-// if (dejaExistant==false){
-//   user.bookedtours.push(
-//     {bookedplace: req.params.tourID,
-//      bookedhour: Date.now(),
-//     }
-//   )
-//   user.save();
-//   }
-
-// });
 
 router.put(`/update-point/:token/:score`, async function (req, res, next) {
   const user = await userModel.updateOne({ token: req.params.token }, { $inc: { points: Number(req.params.score) } });
@@ -489,8 +453,6 @@ router.put(`/update-visit-history`, async function (req, res, next) {
       })
     user.save();
     }
-
-    console.log(dejaExistant)
 
   res.json()
 });
@@ -551,7 +513,6 @@ router.get("/send-favorites", async (req, res, next) => {
     
   await userModel.updateOne({ token: req.query.token }, { userfavs: tabId });
   var userUpdated = await userModel.findOne({ token: req.query.token });
-  console.log(userUpdated)
 
   res.json({ idMonument: idMonument, listFavId: tabId });
 });
